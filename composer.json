@@ -1,0 +1,47 @@
+{
+  "name":"contao-estatemanager/onoffice-api-import",
+  "description":"onOffice API Import Extension for Contao EstateManager",
+  "keywords":["contao","estatemanager","realestate","estate","onoffice"],
+  "homepage":"https://www.contao-estatemanager.com/",
+  "license":"proprietary",
+  "authors":[
+    {
+      "name":"Daniele Sciannimanica",
+      "homepage":"https://github.com/doishub",
+      "role":"Developer"
+    }
+  ],
+  "require":{
+    "php":"^7.4 || ^8.0",
+    "contao/core-bundle":"^4.9",
+    "oveleon/contao-onoffice-api-bundle": "^2.0"
+  },
+  "require-dev": {
+    "contao/manager-plugin": "^2.0",
+    "friendsofphp/php-cs-fixer": "^2.16"
+  },
+  "conflict": {
+    "contao/core": "*",
+    "contao/manager-plugin": "<2.0 || >=3.0"
+  },
+  "autoload":{
+    "psr-4": {
+      "ContaoEstateManager\\OnOfficeApiImport\\": "src/"
+    },
+    "classmap": [
+      "src/Resources/contao/"
+    ],
+    "exclude-from-classmap": [
+      "src/Resources/contao/config/",
+      "src/Resources/contao/dca/",
+      "src/Resources/contao/languages/",
+      "src/Resources/contao/templates/"
+    ]
+  },
+  "extra":{
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    },
+    "contao-manager-plugin": "ContaoEstateManager\\OnOfficeApiImport\\ContaoManager\\Plugin"
+  }
+}

@@ -1,0 +1,3 @@
+contaoestatemanager.onofficeapiimport.controller:
+  resource: ../../Controller
+  type: annotation

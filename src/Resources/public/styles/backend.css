@@ -1,0 +1,68 @@
+.import_wrap div.module{
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e6e6e8;
+}
+
+.import_wrap div.module.disabled{
+    pointer-events: none;
+    opacity: .5;
+}
+
+.import_wrap div.module:last-child{
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: 0 none;
+}
+
+.import_wrap div.top{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.import_wrap div.progress{
+    display: none;
+    margin-top: 15px;
+}
+
+.import_wrap div.progress-info{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.import_wrap div.progress-info .info:after{
+    display: inline-block;
+    content: '';
+    width: 10px;
+    height: 10px;
+    margin-left: 5px;
+
+    transform-origin: center center;
+    transform: translateX(-50%) translateY(-50%);
+
+    border-radius: 50%;
+    box-shadow: inset 1px 0 0 0 #F47C00;
+    animation: spin 0.5s infinite linear;
+}
+
+.import_wrap progress{
+    width: 100%;
+    height: 20px;
+}
+
+.import_wrap h5{
+    margin-bottom: 5px;
+}
+
+.import_wrap p{
+    margin-bottom: 0;
+    color: gray;
+}
+
+@keyframes spin {
+    0% {transform: rotate(0)}
+    100% {transform: rotate(360deg)}
+}

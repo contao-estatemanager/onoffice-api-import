@@ -1,0 +1,42 @@
+{% extends "@ContaoCore/Backend/be_page.html.twig" %}
+
+{% block headline %}
+    {{ title|raw }}
+{% endblock %}
+
+{% block error %}{% endblock %}
+
+{% block main %}
+    <div class="tl_listing_container">
+        <div class="import_wrap">
+            {% for module in modules %}
+                <div data-module="{{ module.module }}" class="module{{ module.exists ? '' : ' disabled' }}">
+                    <div class="top">
+                        <div>
+                            <h5>{{ module.name }}</h5>
+                            <p>{{ module.desc }}</p>
+                        </div>
+                        <div>
+                            <button type="button" class="tl_submit"{{ module.exists ? '' : ' disabled' }}>Import</button>
+                        </div>
+                    </div>
+                    <div class="progress">
+                        <progress value="0" max="100">0%</progress>
+                        <div class="progress-info">
+                            <div>
+                                <span class="current">0</span> / <span class="count">0</span>
+                            </div>
+                            <div>
+                                <span class="info">Retrieve data...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        new OnOfficeImport();
+    </script>
+{% endblock %}

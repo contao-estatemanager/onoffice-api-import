@@ -1,0 +1,37 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/onoffice_import.php" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="onoffice_import.title">
+        <source>Import data from onOffice</source>
+        <target>Daten aus onOffice importieren</target>
+      </trans-unit>
+
+      <trans-unit id="onoffice_import.regions.title">
+        <source>Regions</source>
+        <target>Regionen</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.regions.desc">
+        <source>Imports regions from onOffice</source>
+        <target>Importiert Regionen aus onOffice</target>
+      </trans-unit>
+
+      <trans-unit id="onoffice_import.objectTypes.title">
+        <source>Object types</source>
+        <target>Objekttypen</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.objectTypes.desc">
+        <source>Imports object types from onOffice</source>
+        <target>Importiert Objekttypen aus onOffice</target>
+      </trans-unit>
+
+      <trans-unit id="onoffice_import.searchCriteria.title">
+        <source>Search inquiries</source>
+        <target>Suchanfragen</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.searchCriteria.desc">
+        <source>Imports search inquiries from onOffice</source>
+        <target>Importiert Suchanfragen aus onOffice</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
