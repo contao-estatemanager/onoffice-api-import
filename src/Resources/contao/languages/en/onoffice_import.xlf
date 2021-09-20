@@ -25,6 +25,29 @@
       <trans-unit id="onoffice_import.searchCriteria.desc">
         <source>Imports search inquiries from onOffice</source>
       </trans-unit>
+
+      <trans-unit id="onoffice_import.settings.truncate.0">
+        <source>Truncate table</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.truncate.1">
+        <source>Delete all existing records before importing</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.language.0">
+        <source>Language</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.language.1">
+        <source>Please enter the preferred language here</source>
+      </trans-unit>
+
+      <trans-unit id="onoffice_import.button_settings">
+        <source>Settings</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.button_import">
+        <source>Import</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.confirm_import">
+        <source>Do you really want to start the import? If available, please check the settings beforehand.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

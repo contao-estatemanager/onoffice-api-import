@@ -32,6 +32,37 @@
         <source>Imports search inquiries from onOffice</source>
         <target>Importiert Suchanfragen aus onOffice</target>
       </trans-unit>
+
+
+      <trans-unit id="onoffice_import.settings.truncate.0">
+        <source>Truncate table</source>
+        <target>Tabelle leeren</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.truncate.1">
+        <source>Delete all existing records before importing</source>
+        <target>Alle vorhandenen Datensätze vor dem Importieren löschen</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.language.0">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.language.1">
+        <source>Please enter the preferred language here</source>
+        <target>Geben Sie hier bitte die bevorzugte Sprache an</target>
+      </trans-unit>
+
+      <trans-unit id="onoffice_import.button_settings">
+        <source>Settings</source>
+        <target>Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.button_import">
+        <source>Import</source>
+        <target>Importieren</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.confirm_import">
+        <source>Do you really want to start the import? If available, please check the settings beforehand.</source>
+        <target>Möchtest du den Import wirklich starten? Falls vorhanden, überprüfe vorher bitte die Einstellungen.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

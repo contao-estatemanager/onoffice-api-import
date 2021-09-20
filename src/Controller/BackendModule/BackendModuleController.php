@@ -47,6 +47,18 @@ class BackendModuleController extends AbstractController
         $GLOBALS['TL_CSS'][] = 'bundles/estatemanageronofficeapiimport/styles/backend.css';
         $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/estatemanageronofficeapiimport/scripts/dist/main.js';
 
+        // Set default setting fields
+        $arrDefaultFields = [
+            'truncate' => [
+                'label' => [
+                    $this->translator->trans('onoffice_import.settings.truncate.0', [], 'contao_default'),
+                    $this->translator->trans('onoffice_import.settings.truncate.1', [], 'contao_default'),
+                ],
+                'inputType' => 'checkbox',
+                'required' => false
+            ]
+        ];
+
         // Create modules
         $bundles = System::getContainer()->getParameter('kernel.bundles');
         $arrModules = [
@@ -55,18 +67,33 @@ class BackendModuleController extends AbstractController
                 'desc' => $this->translator->trans('onoffice_import.regions.desc', [], 'contao_default'),
                 'module' => 'regions',
                 'exists' => \array_key_exists('RegionEntity', $bundles),
+                'fields' => array_merge(
+                    [
+                        'language' => [
+                            'label' => [
+                                $this->translator->trans('onoffice_import.settings.language.0', [], 'contao_default'),
+                                $this->translator->trans('onoffice_import.settings.language.1', [], 'contao_default'),
+                            ],
+                            'inputType' => 'text',
+                            'required' => true
+                        ]
+                    ],
+                    $arrDefaultFields
+                )
             ],
             [
                 'name' => $this->translator->trans('onoffice_import.objectTypes.title', [], 'contao_default'),
                 'desc' => $this->translator->trans('onoffice_import.objectTypes.desc', [], 'contao_default'),
                 'module' => 'objectTypes',
                 'exists' => \array_key_exists('ObjectTypeEntity', $bundles),
+                'fields' => null
             ],
             [
                 'name' => $this->translator->trans('onoffice_import.searchCriteria.title', [], 'contao_default'),
                 'desc' => $this->translator->trans('onoffice_import.searchCriteria.desc', [], 'contao_default'),
                 'module' => 'searchCriteria',
                 'exists' => \array_key_exists('EstateManagerLeadMatchingTool', $bundles),
+                'fields' => null
             ],
         ];
 
@@ -74,6 +101,11 @@ class BackendModuleController extends AbstractController
             '@EstateManagerOnOfficeApiImport/be_onoffice_import.html.twig',
             [
                 'title' => $this->translator->trans('onoffice_import.title', [], 'contao_default'),
+                'texts' => [
+                    'import'   => $this->translator->trans('onoffice_import.button_import', [], 'contao_default'),
+                    'settings' => $this->translator->trans('onoffice_import.button_settings', [], 'contao_default'),
+                    'confirm'  => $this->translator->trans('onoffice_import.confirm_import', [], 'contao_default')
+                ],
                 'modules' => $arrModules,
             ]
         ));

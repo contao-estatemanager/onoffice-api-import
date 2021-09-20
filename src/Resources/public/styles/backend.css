@@ -1,68 +1,134 @@
-.import_wrap div.module{
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #e6e6e8;
+@charset "UTF-8";
+.import_wrap h5 {
+  margin-bottom: 5px;
 }
-
-.import_wrap div.module.disabled{
-    pointer-events: none;
-    opacity: .5;
+.import_wrap p {
+  margin-bottom: 0;
+  color: gray;
 }
-
-.import_wrap div.module:last-child{
-    padding-bottom: 0;
-    margin-bottom: 0;
-    border-bottom: 0 none;
+.import_wrap button {
+  background: #fff;
 }
-
-.import_wrap div.top{
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: flex-end;
+.import_wrap button[type=button].open {
+  border-color: #f47c00;
 }
-
-.import_wrap div.progress{
-    display: none;
-    margin-top: 15px;
+.import_wrap div.module {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e6e6e8;
 }
-
-.import_wrap div.progress-info{
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
+.import_wrap div.module.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
-
-.import_wrap div.progress-info .info:after{
-    display: inline-block;
-    content: '';
-    width: 10px;
-    height: 10px;
-    margin-left: 5px;
-
-    transform-origin: center center;
-    transform: translateX(-50%) translateY(-50%);
-
-    border-radius: 50%;
-    box-shadow: inset 1px 0 0 0 #F47C00;
-    animation: spin 0.5s infinite linear;
+.import_wrap div.module:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: 0 none;
 }
-
-.import_wrap progress{
-    width: 100%;
-    height: 20px;
+.import_wrap div.wrap {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-end;
 }
-
-.import_wrap h5{
-    margin-bottom: 5px;
+.import_wrap div.progress,
+.import_wrap div.settings {
+  display: none;
+  margin-top: 15px;
 }
-
-.import_wrap p{
-    margin-bottom: 0;
-    color: gray;
+.import_wrap div.settings h3 {
+  font-size: 0.875rem;
+}
+.import_wrap div.settings form {
+  display: block;
+  width: 100%;
+}
+.import_wrap div.settings .formbody {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 15px;
+  background: #fbfbfb;
+  border-radius: 1px;
+  border: 1px solid #f1f1f1;
+}
+.import_wrap div.settings .setting-widget {
+  width: 49%;
+}
+.import_wrap div.settings .setting-widget.checkbox {
+  margin-bottom: 16px;
+}
+.import_wrap div.settings .setting-widget.checkbox .tl_checkbox_single_container {
+  margin: 18px 0 1px;
+}
+.import_wrap div.settings.open {
+  display: block;
+}
+.import_wrap div.progress-info {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+.import_wrap div.progress-info .info {
+  animation: flash 1s infinite linear;
+}
+.import_wrap div.progress-info .info:after {
+  display: inline-block;
+  content: "";
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  transform-origin: center center;
+  transform: translateX(-50%) translateY(-50%);
+  border-radius: 50%;
+  box-shadow: inset 1px 0 0 0 #78b178;
+  animation: spin 0.5s infinite linear;
+}
+.import_wrap div.progress-info .info.success {
+  animation: none;
+}
+.import_wrap div.progress-info .info.success:after {
+  content: "✓";
+  color: green;
+  transform: unset;
+  border-radius: unset;
+  animation: none;
+  box-shadow: none;
+}
+.import_wrap .progress-bar {
+  width: 100%;
+  height: 10px;
+  border: 1px solid #ccc;
+  background: #f1f1f1;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+.import_wrap .progress-bar .progress-value {
+  width: 0%;
+  height: 10px;
+  background: #78b178;
 }
 
 @keyframes spin {
-    0% {transform: rotate(0)}
-    100% {transform: rotate(360deg)}
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
+@keyframes flash {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+/*# sourceMappingURL=backend.css.map */

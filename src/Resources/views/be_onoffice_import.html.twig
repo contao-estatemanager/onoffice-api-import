@@ -11,17 +11,49 @@
         <div class="import_wrap">
             {% for module in modules %}
                 <div data-module="{{ module.module }}" class="module{{ module.exists ? '' : ' disabled' }}">
-                    <div class="top">
+                    <div class="wrap">
                         <div>
                             <h5>{{ module.name }}</h5>
                             <p>{{ module.desc }}</p>
                         </div>
                         <div>
-                            <button type="button" class="tl_submit"{{ module.exists ? '' : ' disabled' }}>Import</button>
+                            {% if module.fields %}
+                                <button type="button" class="tl_submit">{{ texts.settings }}</button>
+                            {% endif %}
+                            <button type="submit" class="tl_submit"{{ module.exists ? '' : ' disabled' }}>{{ texts.import }}</button>
                         </div>
                     </div>
+                    {% if module.fields %}
+                        <div class="settings">
+                            <form id="form_{{ module.module }}">
+                                <div class="formbody">
+                                    {% for fieldName, field in module.fields %}
+                                        {% if field.inputType == 'checkbox' %}
+                                            <div class="setting-widget checkbox">
+                                                <div id="ctrl_{{ fieldName }}" class="tl_checkbox_single_container">
+                                                    <input type="checkbox" name="{{ fieldName }}" id="opt_{{ module.name }}_{{ fieldName }}" class="tl_checkbox" value="1" onfocus="Backend.getScrollOffset()" {% if field.required %}required{% endif %}>
+                                                    <label for="opt_{{ module.name }}_{{ fieldName }}">{{ field.label.0 }}{% if field.required %}<span class="mandatory">*</span>{% endif %}</label>
+                                                </div>
+                                                <p class="tl_help tl_tip" title="">{{ field.label.1 }}</p>
+                                            </div>
+                                        {% else %}
+                                            <div class="setting-widget text">
+                                                <h3>
+                                                    <label for="ctrl_{{ module.name }}_{{ fieldName }}">{{ field.label.0 }}{% if field.required %}<span class="mandatory">*</span>{% endif %}</label>
+                                                </h3>
+                                                <input type="text" name="{{ fieldName }}" id="ctrl_{{ module.name }}_{{ fieldName }}" class="tl_text"onfocus="Backend.getScrollOffset()" {% if field.required %}required{% endif %}>
+                                                <p class="tl_help tl_tip" title="">{{ field.label.1 }}</p>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
                     <div class="progress">
-                        <progress value="0" max="100">0%</progress>
+                        <div class="progress-bar">
+                            <div class="progress-value"></div>
+                        </div>
                         <div class="progress-info">
                             <div>
                                 <span class="current">0</span> / <span class="count">0</span>
@@ -37,6 +69,10 @@
     </div>
 
     <script>
-        new OnOfficeImport();
+        new OnOfficeImport({
+            texts: {
+                confirmMessage: '{{ texts.confirm }}'
+            }
+        });
     </script>
 {% endblock %}
