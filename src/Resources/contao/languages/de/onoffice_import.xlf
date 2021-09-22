@@ -50,6 +50,30 @@
         <source>Please enter the preferred language here</source>
         <target>Geben Sie hier bitte die bevorzugte Sprache an</target>
       </trans-unit>
+      <trans-unit id="onoffice_import.settings.marketingType.0">
+        <source>Marketing type</source>
+        <target>Vermakrtungsart</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.marketingType.1">
+        <source>Please enter the preferred marketing type here</source>
+        <target>Geben Sie hier bitte die bevorzugte Vermarktungsart an</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.marketingType.buy">
+        <source>Buy</source>
+        <target>Kauf</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.marketingType.rent">
+        <source>Rent</source>
+        <target>Miete</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.import_regions.0">
+        <source>Connect region</source>
+        <target>Regionen verbinden</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.import_regions.1">
+        <source>Connects the search request with available regions in the system. Works only with regions imported from onOffice. If a proximity search is used, this function is not needed.</source>
+        <target>Verbindet den Suchauftrag mit verfügbaren Regionen im System. Funktioniert nur mit Regionen, welche aus onOffice importiert wurden. Sollte eine Umkreissuche verwendet werden, wird diese Funktion nicht benötigt.</target>
+      </trans-unit>
 
       <trans-unit id="onoffice_import.button_settings">
         <source>Settings</source>
@@ -60,8 +84,8 @@
         <target>Importieren</target>
       </trans-unit>
       <trans-unit id="onoffice_import.confirm_import">
-        <source>Do you really want to start the import? If available, please check the settings beforehand.</source>
-        <target>Möchtest du den Import wirklich starten? Falls vorhanden, überprüfe vorher bitte die Einstellungen.</target>
+        <source>Do you really want to start the import? This process may take a few minutes.</source>
+        <target>Möchtest du den Import wirklich starten? Dieser Vorgang kann einige Minuten in Anspruch nehmen.</target>
       </trans-unit>
     </body>
   </file>

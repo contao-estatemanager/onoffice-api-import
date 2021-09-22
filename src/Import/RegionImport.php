@@ -22,49 +22,57 @@ class RegionImport
 {
     private OnOfficeRead $onOfficeHandler;
 
-    private $intCount = 0;
+    private int $intCount = 0;
 
+    /**
+     * Construct.
+     */
     public function __construct()
     {
         $this->onOfficeHandler = new OnOfficeRead();
     }
 
     /**
-     * Fetch all regions and prepare database
+     * Fetch all regions and prepare database.
+     *
+     * @param mixed|null $attributes
      */
-    public function prepare($attributes, $truncate = false): array
+    public function fetch(?array $attributes = null): array
     {
-        if($truncate)
-        {
-            $this->truncate();
-        }
-
         $arrData = $this->onOfficeHandler->run('regions', null, null, $attributes, true);
 
         return [
-            'message'  => 'Please wait, the data will be imported',
-            'meta'     => $arrData['data']['meta'],
-            'truncate' => $truncate,
-            'task'     => [
+            'message' => 'Please wait, the data will be imported',
+            'countAbsolute' => $arrData['data']['meta']['cntabsolute'] ?? 0,
+            'simulateProgress' => 15,
+            'task' => [
                 'action' => '/onoffice/import/regions',
                 'data' => $arrData['data']['records'],
-                'language' => $attributes['language']
-            ]
+                'language' => $attributes['language'],
+            ],
         ];
     }
 
+    /**
+     * Import root language and regions.
+     *
+     * @param $arrRecords
+     * @param $rootLanguage
+     */
     public function import($arrRecords, $rootLanguage): array
     {
-        if(null === $arrRecords)
+        if (null === $arrRecords)
         {
             return [];
         }
 
         $objRoot = RegionModel::findByLanguage($rootLanguage);
 
-        if(null === $objRoot) {
+        if (null === $objRoot)
+        {
             $objRoot = new RegionModel();
             $objRoot->type = 'root';
+            $objRoot->tstamp = time();
             $objRoot->title = $rootLanguage;
             $objRoot->language = $rootLanguage;
             $objRoot->published = 1;
@@ -75,7 +83,7 @@ class RegionImport
 
         foreach ($arrRecords as $arrRecord)
         {
-            if(array_key_exists('elements', $arrRecord))
+            if (\array_key_exists('elements', $arrRecord))
             {
                 $arrRecord = $arrRecord['elements'];
             }
@@ -84,16 +92,25 @@ class RegionImport
         }
 
         return [
-            'message'  => 'Import successful',
-            'count'    => $this->intCount
+            'message' => 'Import successful',
+            'count' => $this->intCount,
         ];
     }
 
+    /**
+     * Import a single region.
+     *
+     * @param $arrRecord
+     * @param null $parentId
+     */
     public function importRegion($arrRecord, $parentId = null): void
     {
         $objRegion = new RegionModel();
         $objRegion->type = 'regular';
         $objRegion->pid = $parentId;
+        $objRegion->vid = $arrRecord['id'];
+        $objRegion->tstamp = time();
+        $objRegion->sorting = $this->intCount;
         $objRegion->title = $arrRecord['name'];
         $objRegion->description = $arrRecord['description'];
         $objRegion->country = $arrRecord['country'];
@@ -103,9 +120,9 @@ class RegionImport
 
         $objRegion->save();
 
-        $this->intCount++;
+        ++$this->intCount;
 
-        if(!empty($arrRecord['children']))
+        if (!empty($arrRecord['children']))
         {
             foreach ($arrRecord['children'] as $arrChildren)
             {
@@ -114,6 +131,9 @@ class RegionImport
         }
     }
 
+    /**
+     * Truncate table.
+     */
     public function truncate(): void
     {
         $strTable = RegionModel::getTable();

@@ -55,8 +55,8 @@ class BackendModuleController extends AbstractController
                     $this->translator->trans('onoffice_import.settings.truncate.1', [], 'contao_default'),
                 ],
                 'inputType' => 'checkbox',
-                'required' => false
-            ]
+                'required' => false,
+            ],
         ];
 
         // Create modules
@@ -75,25 +75,62 @@ class BackendModuleController extends AbstractController
                                 $this->translator->trans('onoffice_import.settings.language.1', [], 'contao_default'),
                             ],
                             'inputType' => 'text',
-                            'required' => true
-                        ]
+                            'required' => true,
+                        ],
                     ],
                     $arrDefaultFields
-                )
+                ),
             ],
             [
                 'name' => $this->translator->trans('onoffice_import.objectTypes.title', [], 'contao_default'),
                 'desc' => $this->translator->trans('onoffice_import.objectTypes.desc', [], 'contao_default'),
                 'module' => 'objectTypes',
                 'exists' => \array_key_exists('ObjectTypeEntity', $bundles),
-                'fields' => null
+                'fields' => array_merge(
+                    [
+                        'language' => [
+                            'label' => [
+                                $this->translator->trans('onoffice_import.settings.language.0', [], 'contao_default'),
+                                $this->translator->trans('onoffice_import.settings.language.1', [], 'contao_default'),
+                            ],
+                            'inputType' => 'text',
+                            'required' => true,
+                        ],
+                    ],
+                    $arrDefaultFields
+                ),
             ],
             [
                 'name' => $this->translator->trans('onoffice_import.searchCriteria.title', [], 'contao_default'),
                 'desc' => $this->translator->trans('onoffice_import.searchCriteria.desc', [], 'contao_default'),
                 'module' => 'searchCriteria',
                 'exists' => \array_key_exists('EstateManagerLeadMatchingTool', $bundles),
-                'fields' => null
+                'fields' => array_merge(
+                    [
+                        'marketingType' => [
+                            'label' => [
+                                $this->translator->trans('onoffice_import.settings.marketingType.0', [], 'contao_default'),
+                                $this->translator->trans('onoffice_import.settings.marketingType.1', [], 'contao_default'),
+                            ],
+                            'inputType' => 'select',
+                            'options' => [
+                                '' => '-',
+                                'kauf' => $this->translator->trans('onoffice_import.settings.marketingType.buy', [], 'contao_default'),
+                                'miete' => $this->translator->trans('onoffice_import.settings.marketingType.rent', [], 'contao_default'),
+                            ],
+                            'required' => true,
+                        ],
+                        'regions' => [
+                            'label' => [
+                                $this->translator->trans('onoffice_import.settings.import_regions.0', [], 'contao_default'),
+                                $this->translator->trans('onoffice_import.settings.import_regions.1', [], 'contao_default'),
+                            ],
+                            'inputType' => 'checkbox',
+                            'required' => false,
+                        ],
+                    ],
+                    $arrDefaultFields
+                ),
             ],
         ];
 
@@ -102,9 +139,10 @@ class BackendModuleController extends AbstractController
             [
                 'title' => $this->translator->trans('onoffice_import.title', [], 'contao_default'),
                 'texts' => [
-                    'import'   => $this->translator->trans('onoffice_import.button_import', [], 'contao_default'),
+                    'retrieve' => $this->translator->trans('onoffice_import.retrieve_data', [], 'contao_default'),
+                    'import' => $this->translator->trans('onoffice_import.button_import', [], 'contao_default'),
                     'settings' => $this->translator->trans('onoffice_import.button_settings', [], 'contao_default'),
-                    'confirm'  => $this->translator->trans('onoffice_import.confirm_import', [], 'contao_default')
+                    'confirm' => $this->translator->trans('onoffice_import.confirm_import', [], 'contao_default'),
                 ],
                 'modules' => $arrModules,
             ]

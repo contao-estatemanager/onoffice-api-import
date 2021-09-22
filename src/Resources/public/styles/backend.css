@@ -85,16 +85,22 @@
   box-shadow: inset 1px 0 0 0 #78b178;
   animation: spin 0.5s infinite linear;
 }
-.import_wrap div.progress-info .info.success {
+.import_wrap div.progress-info .info.success, .import_wrap div.progress-info .info.error {
   animation: none;
 }
-.import_wrap div.progress-info .info.success:after {
-  content: "✓";
-  color: green;
+.import_wrap div.progress-info .info.success:after, .import_wrap div.progress-info .info.error:after {
   transform: unset;
   border-radius: unset;
   animation: none;
   box-shadow: none;
+}
+.import_wrap div.progress-info .info.success:after {
+  content: "✓";
+  color: green;
+}
+.import_wrap div.progress-info .info.error:after {
+  content: "✕";
+  color: #800000;
 }
 .import_wrap .progress-bar {
   width: 100%;
@@ -109,6 +115,7 @@
   width: 0%;
   height: 10px;
   background: #78b178;
+  transition: width 0.5s ease-in-out;
 }
 
 @keyframes spin {

@@ -112,17 +112,25 @@
         animation: spin 0.5s infinite linear;
       }
 
-      &.success{
+      &.success, &.error{
         animation: none;
 
         &:after{
-          content: "✓";
-          color: green;
           transform: unset;
           border-radius: unset;
           animation: none;
           box-shadow: none;
         }
+      }
+
+      &.success:after {
+        content: "✓";
+        color: green;
+      }
+
+      &.error:after{
+        content: "✕";
+        color: #800000;
       }
     }
   }
@@ -140,6 +148,7 @@
       width: 0%;
       height: 10px;
       background: #78b178;
+      transition: width .5s ease-in-out;
     }
   }
 }

@@ -36,6 +36,18 @@
                                                 </div>
                                                 <p class="tl_help tl_tip" title="">{{ field.label.1 }}</p>
                                             </div>
+                                        {% elseif field.inputType == 'select' %}
+                                            <div class="setting-widget select">
+                                                <h3>
+                                                    <label for="ctrl_{{ module.name }}_{{ fieldName }}">{{ field.label.0 }}{% if field.required %}<span class="mandatory">*</span>{% endif %}</label>
+                                                </h3>
+                                                <select name="{{ fieldName }}" id="ctrl_{{ module.name }}_{{ fieldName }}" class="tl_select" onfocus="Backend.getScrollOffset()" {% if field.required %}required{% endif %}>
+                                                    {% for val, lab in field.options %}
+                                                        <option value="{{ val }}">{{ lab }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <p class="tl_help tl_tip" title="">{{ field.label.1 }}</p>
+                                            </div>
                                         {% else %}
                                             <div class="setting-widget text">
                                                 <h3>
@@ -59,7 +71,7 @@
                                 <span class="current">0</span> / <span class="count">0</span>
                             </div>
                             <div>
-                                <span class="info">Retrieve data...</span>
+                                <span class="info">{{ texts.retrieve }}</span>
                             </div>
                         </div>
                     </div>

@@ -38,6 +38,24 @@
       <trans-unit id="onoffice_import.settings.language.1">
         <source>Please enter the preferred language here</source>
       </trans-unit>
+      <trans-unit id="onoffice_import.settings.marketingType.0">
+        <source>Marketing type</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.marketingType.1">
+        <source>Please enter the preferred marketing type here</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.marketingType.buy">
+        <source>Buy</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.marketingType.rent">
+        <source>Rent</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.import_regions.0">
+        <source>Connect region</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.settings.import_regions.1">
+        <source>Connects the search request with available regions in the system. Works only with regions imported from onOffice. If a proximity search is used, this function is not needed.</source>
+      </trans-unit>
 
       <trans-unit id="onoffice_import.button_settings">
         <source>Settings</source>
@@ -46,7 +64,7 @@
         <source>Import</source>
       </trans-unit>
       <trans-unit id="onoffice_import.confirm_import">
-        <source>Do you really want to start the import? If available, please check the settings beforehand.</source>
+        <source>Do you really want to start the import? This process may take a few minutes.</source>
       </trans-unit>
     </body>
   </file>

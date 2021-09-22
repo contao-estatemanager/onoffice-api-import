@@ -14,7 +14,9 @@ declare(strict_types=1);
 
 namespace ContaoEstateManager\OnOfficeApiImport\Controller;
 
+use ContaoEstateManager\OnOfficeApiImport\Import\ObjectTypeImport;
 use ContaoEstateManager\OnOfficeApiImport\Import\RegionImport;
+use ContaoEstateManager\OnOfficeApiImport\Import\SearchCriteriaImport;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ImportController
 {
     /**
-     * Fetch regions from onOffice
+     * Fetch regions from onOffice.
      *
      * @Route("/onoffice/fetch/regions", name="onoffice_fetch_regions")
      */
@@ -33,17 +35,20 @@ class ImportController
     {
         $regionImporter = new RegionImport();
 
-        $arrOptions = [
-            'language' => $request->get('language')
-        ];
+        if ($request->get('truncate') ?? false)
+        {
+            $regionImporter->truncate();
+        }
 
-        $arrData = $regionImporter->prepare($arrOptions, $request->get('truncate') ?? false);
+        $arrData = $regionImporter->fetch([
+            'language' => $request->get('language'),
+        ]);
 
         return new JsonResponse($arrData);
     }
 
     /**
-     * Import regions
+     * Import regions.
      *
      * @Route("/onoffice/import/regions", name="onoffice_import_regions")
      */
@@ -51,8 +56,97 @@ class ImportController
     {
         $regionImporter = new RegionImport();
 
-        $arrData = $request->toArray();
-        $arrData = $regionImporter->import($arrData['data'], $arrData['language']);
+        $arrRequest = $request->toArray();
+
+        $arrData = $regionImporter->import($arrRequest['data'], $arrRequest['language']);
+
+        return new JsonResponse($arrData);
+    }
+
+    /**
+     * Fetch object types from onOffice.
+     *
+     * @Route("/onoffice/fetch/objectTypes", name="onoffice_fetch_objecttypes")
+     */
+    public function fetchObjectTypes(Request $request): JsonResponse
+    {
+        $objectTypeImporter = new ObjectTypeImport();
+
+        if ($request->get('truncate') ?? false)
+        {
+            $objectTypeImporter->truncate();
+        }
+
+        $arrData = $objectTypeImporter->fetch([
+            'language' => $request->get('language'),
+            'labels' => true,
+            'modules' => ['estate'],
+        ]);
+
+        return new JsonResponse($arrData);
+    }
+
+    /**
+     * Import regions.
+     *
+     * @Route("/onoffice/import/objectTypes", name="onoffice_import_objecttypes")
+     */
+    public function importObjectTypes(Request $request): JsonResponse
+    {
+        $regionImporter = new ObjectTypeImport();
+
+        $arrRequest = $request->toArray();
+
+        $arrData = $regionImporter->import($arrRequest['data']);
+
+        return new JsonResponse($arrData);
+    }
+
+    /**
+     * Fetch search criteria from onOffice.
+     *
+     * @Route("/onoffice/fetch/searchCriteria", name="onoffice_fetch_searchcriteria")
+     */
+    public function fetchSearchCriteria(Request $request): JsonResponse
+    {
+        $searchCriteriaImporter = new SearchCriteriaImport();
+
+        if ($request->get('truncate') ?? false)
+        {
+            $searchCriteriaImporter->truncate();
+        }
+
+        $arrData = $searchCriteriaImporter->fetch([
+            'offset' => 0,
+            'limit' => 0,
+            'outputall' => 0,
+            'searchdata' => [
+                'vermarktungsart' => $request->get('marketingType'),
+            ],
+        ], (bool) $request->get('regions'));
+
+        return new JsonResponse($arrData);
+    }
+
+    /**
+     * Import regions.
+     *
+     * @Route("/onoffice/import/searchCriteria", name="onoffice_import_searchcriteria")
+     */
+    public function importSearchCriteria(Request $request): JsonResponse
+    {
+        $searchCriteriaImporter = new SearchCriteriaImport();
+
+        $arrRequest = $request->toArray();
+
+        $arrData = $searchCriteriaImporter->partialImport([
+            'offset' => $arrRequest['offset'],
+            'limit' => SearchCriteriaImport::LIMIT,
+            'outputall' => 1,
+            'searchdata' => [
+                'vermarktungsart' => $arrRequest['marketingType'],
+            ],
+        ], (bool) $arrRequest['regions']);
 
         return new JsonResponse($arrData);
     }
