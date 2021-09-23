@@ -17,6 +17,7 @@ namespace ContaoEstateManager\OnOfficeApiImport\Import;
 use Contao\Database;
 use ContaoEstateManager\LeadMatchingTool\Model\SearchCriteriaModel;
 use ContaoEstateManager\ObjectTypeEntity\ObjectTypeModel;
+use ContaoEstateManager\OnOfficeApiImport\Mapper\SearchCriteriaMapper;
 use ContaoEstateManager\RegionEntity\Region;
 use ContaoEstateManager\RegionEntity\RegionConnectionModel;
 use ContaoEstateManager\RegionEntity\RegionModel;
@@ -25,41 +26,67 @@ use Oveleon\ContaoOnofficeApiBundle\OnOfficeRead;
 class SearchCriteriaImport
 {
     /**
-     * onOffice Handler.
+     * onOffice Handler
      */
     private OnOfficeRead $onOfficeHandler;
 
     /**
-     * Current count.
+     * Search criteria mapper
+     */
+    private SearchCriteriaMapper $mapper;
+
+    /**
+     * Current count
      */
     private int $intCount = 0;
 
     /**
-     * Existing object types.
-     */
-    private array $arrObjectTypes;
-
-    /**
-     * Import steps.
+     * Import steps
      */
     public const LIMIT = 500;
 
     /**
-     * Construct.
+     * Construct
      */
     public function __construct()
     {
+        // Create mapper
+        $this->mapper = new SearchCriteriaMapper();
+
+        // Create onOffice handler
         $this->onOfficeHandler = new OnOfficeRead();
     }
 
     /**
-     * Fetch all search criteria.
-     *
-     * @param mixed|null $attributes
+     * Get all search criteria from onOffice by given attributes
      */
-    public function fetch(?array $attributes = null, bool $importRegions = false): array
+    public function getAllSearchCriteria($attributes)
     {
-        $arrData = $this->onOfficeHandler->run('search', 'searchcriteria', null, $attributes, true);
+        // Set mapper schema
+        $this->mapper->setSchema(SearchCriteriaMapper::SCHEMA_FLAT);
+
+        // Return onOffice records
+        return $this->onOfficeHandler->run('search', 'searchcriteria', null, $attributes, true);
+    }
+
+    /**
+     * Return search criteria by their id
+     */
+    public function getSearchCriteriaById($id)
+    {
+        // Set mapper schema
+        $this->mapper->setSchema(SearchCriteriaMapper::SCHEMA_RANGE);
+
+        // Return onOffice record
+        return $this->onOfficeHandler->run('searchcriterias', null, null, ['mode' => 'searchcriteria', 'ids' => (array) $id], true);
+    }
+
+    /**
+     * Fetch all search criteria
+     */
+    public function fetchPartialImport(?array $attributes = null, bool $importRegions = false): array
+    {
+        $arrData = $this->getAllSearchCriteria($attributes);
 
         return [
             'message' => 'Import package (0-'.static::LIMIT.')',
@@ -74,30 +101,29 @@ class SearchCriteriaImport
     }
 
     /**
-     * Import search criteria.
-     *
-     * @param $attributes
+     * Import search criteria
      */
     public function partialImport($attributes, bool $importRegions = false): array
     {
         $intOffset = $attributes['offset'];
 
-        $arrData = $this->onOfficeHandler->run('search', 'searchcriteria', null, $attributes, true);
+        $arrData = $this->getAllSearchCriteria($attributes);
         $arrRecords = $arrData['data']['records'] ?? null;
 
-        $objObjectTypes = ObjectTypeModel::findAll();
-        $this->arrObjectTypes = [];
-
-        foreach ($objObjectTypes as $objObjectType)
-        {
-            $this->arrObjectTypes[$objObjectType->vid] = $objObjectType->id;
-        }
+        // Set mapper bag
+        $this->mapper->setBag($this->createObjectTypeBag());
 
         if ($arrRecords)
         {
             foreach ($arrRecords as $record)
             {
-                $this->import($record, $importRegions);
+                // Set new record
+                $this->mapper->setRecord($record);
+
+                // Import record
+                $this->import($importRegions);
+
+                // Count imported records
                 ++$this->intCount;
             }
         }
@@ -129,76 +155,77 @@ class SearchCriteriaImport
     }
 
     /**
-     * Import search criteria record.
-     *
-     * @param $arrRecord
+     * Update a single search criteria record or delete if not exists anymore
      */
-    public function import($arrRecord, bool $importRegions = false): void
+    public function singleUpdate()
     {
-        // Check if record exists
-        if (!$objRecord = SearchcriteriaModel::findOneBy('vid', $arrRecord['id']))
+        // Fetch the oldest record
+        $objSearchCriteria = SearchCriteriaModel::findOneBy(['vid!=?'], [""], [
+           'order' => 'tstamp DESC'
+        ]);
+
+        if(null === $objSearchCriteria)
         {
-            $objRecord = new SearchcriteriaModel();
-            $objRecord->vid = $arrRecord['id'];
+            return;
         }
 
-        $arrData = $arrRecord['elements'];
+        // Fetch record data from onOffice
+        $arrSearchCriteria = $this->getSearchCriteriaById($objSearchCriteria->vid);
 
-        $arrMapping = [
-            'marketingType' => 'vermarktungsart',
-            'room_from' => 'anzahl_zimmer__von',
-            'room_to' => 'anzahl_zimmer__bis',
-            'area_from' => 'wohnflaeche__von',
-            'area_to' => 'wohnflaeche__bis',
-            'city' => 'range_ort',
-            'country' => 'range_land',
-            'range' => 'range',
-            'latitude' => 'range_breitengrad',
-            'longitude' => 'range_laengengrad',
-            'postalcode' => function ($a) {
-                return serialize((array) $a['range_plz'] ?? []);
-            },
-            'price_from' => function ($a) {
-                return ('miete' === $a['vermarktungsart'] ? $a['kaltmiete__von'] : $a['kaufpreis__von']) ?? '';
-            },
-            'price_to' => function ($a) {
-                return ('miete' === $a['vermarktungsart'] ? $a['kaltmiete__bis'] : $a['kaufpreis__bis']) ?? '';
-            },
-            'objectType' => function ($a) {
-                if (\array_key_exists($a['objektart'], $this->arrObjectTypes))
-                {
-                    return $this->arrObjectTypes[$a['objektart']];
-                }
+        // Reduce data to the record
+        $record = $arrSearchCriteria['data']['records'][0] ?? null;
 
-                return $a['objektart'];
-            },
-        ];
+        // Set mapper bag
+        $this->mapper->setBag($this->createObjectTypeBag());
 
+        // Update
+        if($record)
+        {
+            // Set new record
+            $this->mapper->setRecord($record);
+
+            // Update record
+            $this->import();
+        }
+        // Delete
+        else
+        {
+            $objSearchCriteria->delete();
+        }
+    }
+
+    /**
+     * Import search criteria record
+     */
+    private function import(bool $importRegions = false): void
+    {
+        // Get current record
+        $record = $this->mapper->getRecord();
+
+        // Check if record exists
+        if (!$objRecord = SearchcriteriaModel::findOneBy('vid', $this->mapper->getId()))
+        {
+            $objRecord = new SearchcriteriaModel();
+            $objRecord->vid = $this->mapper->getId();
+        }
+
+        // Set mapped fields
+        foreach ($this->mapper->apply() as $field => $value)
+        {
+            $objRecord->{$field} = $value;
+        }
+
+        // Set default fields
         $objRecord->tstamp = time();
         $objRecord->published = 1;
 
-        foreach ($arrMapping as $field => $key)
-        {
-            if (\is_string($key) && $arrData[$key])
-            {
-                $objRecord->{$field} = $arrData[$key];
-            }
-            elseif (\is_callable($key) && $key instanceof \Closure)
-            {
-                if ($val = $key($arrData))
-                {
-                    $objRecord->{$field} = $val;
-                }
-            }
-        }
-
-        // Import regions
-        if ($importRegions && \is_array($arrData['regionaler_zusatz']))
+        // Set regions (will only affect by partial import)
+        if ($importRegions && \is_array($record['regionaler_zusatz']))
         {
             $arrRegions = [];
             $currentId = $objRecord->id ?? Database::getInstance()->getNextId(SearchCriteriaModel::getTable());
 
-            foreach ($arrData['regionaler_zusatz'] as $regionKey)
+            foreach ($record['regionaler_zusatz'] as $regionKey)
             {
                 if ($objRegion = RegionModel::findOneBy('vid', $regionKey))
                 {
@@ -219,7 +246,29 @@ class SearchCriteriaImport
     }
 
     /**
-     * Truncate table.
+     * Creates a new bag of object types
+     */
+    private function createObjectTypeBag()
+    {
+        $objectTypes = ObjectTypeModel::findAll();
+
+        if(null === $objectTypes)
+        {
+            return null;
+        }
+
+        $return = [];
+
+        foreach ($objectTypes as $objectType)
+        {
+            $return[$objectType->vid] = $objectType->id;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Truncate table
      */
     public function truncate(): void
     {

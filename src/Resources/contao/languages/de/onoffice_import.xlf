@@ -67,8 +67,8 @@
         <target>Miete</target>
       </trans-unit>
       <trans-unit id="onoffice_import.settings.import_regions.0">
-        <source>Connect region</source>
-        <target>Regionen verbinden</target>
+        <source>Connect region (low performance)</source>
+        <target>Regionen verbinden (low performance)</target>
       </trans-unit>
       <trans-unit id="onoffice_import.settings.import_regions.1">
         <source>Connects the search request with available regions in the system. Works only with regions imported from onOffice. If a proximity search is used, this function is not needed.</source>
