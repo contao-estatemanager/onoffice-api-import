@@ -29,8 +29,14 @@ use Twig\Environment as TwigEnvironment;
  */
 class BackendModuleController extends AbstractController
 {
-    private $twig;
-    private $translator;
+    private TwigEnvironment $twig;
+    private TranslatorInterface $translator;
+
+    private array $modules = [];
+    private array $sections = [];
+
+    private array $defaultSettings = [];
+    private array $bundles = [];
 
     public function __construct(TwigEnvironment $twig, TranslatorInterface $translator)
     {
@@ -47,8 +53,11 @@ class BackendModuleController extends AbstractController
         $GLOBALS['TL_CSS'][] = 'bundles/estatemanageronofficeapiimport/styles/backend.css';
         $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/estatemanageronofficeapiimport/scripts/dist/main.js';
 
+        // Get installed bundles
+        $this->bundles = System::getContainer()->getParameter('kernel.bundles');
+
         // Set default setting fields
-        $arrDefaultFields = [
+        $this->defaultSettings = [
             'truncate' => [
                 'label' => [
                     $this->translator->trans('onoffice_import.settings.truncate.0', [], 'contao_default'),
@@ -60,80 +69,11 @@ class BackendModuleController extends AbstractController
         ];
 
         // Create modules
-        $bundles = System::getContainer()->getParameter('kernel.bundles');
-        $arrModules = [
-            [
-                'name' => $this->translator->trans('onoffice_import.regions.title', [], 'contao_default'),
-                'desc' => $this->translator->trans('onoffice_import.regions.desc', [], 'contao_default'),
-                'module' => 'regions',
-                'exists' => \array_key_exists('RegionEntity', $bundles),
-                'fields' => array_merge(
-                    [
-                        'language' => [
-                            'label' => [
-                                $this->translator->trans('onoffice_import.settings.language.0', [], 'contao_default'),
-                                $this->translator->trans('onoffice_import.settings.language.1', [], 'contao_default'),
-                            ],
-                            'inputType' => 'text',
-                            'required' => true,
-                        ],
-                    ],
-                    $arrDefaultFields
-                ),
-            ],
-            [
-                'name' => $this->translator->trans('onoffice_import.objectTypes.title', [], 'contao_default'),
-                'desc' => $this->translator->trans('onoffice_import.objectTypes.desc', [], 'contao_default'),
-                'module' => 'objectTypes',
-                'exists' => \array_key_exists('ObjectTypeEntity', $bundles),
-                'fields' => array_merge(
-                    [
-                        'language' => [
-                            'label' => [
-                                $this->translator->trans('onoffice_import.settings.language.0', [], 'contao_default'),
-                                $this->translator->trans('onoffice_import.settings.language.1', [], 'contao_default'),
-                            ],
-                            'inputType' => 'text',
-                            'required' => true,
-                        ],
-                    ],
-                    $arrDefaultFields
-                ),
-            ],
-            [
-                'name' => $this->translator->trans('onoffice_import.searchCriteria.title', [], 'contao_default'),
-                'desc' => $this->translator->trans('onoffice_import.searchCriteria.desc', [], 'contao_default'),
-                'module' => 'searchCriteria',
-                'exists' => \array_key_exists('EstateManagerLeadMatchingTool', $bundles),
-                'fields' => array_merge(
-                    [
-                        'marketingType' => [
-                            'label' => [
-                                $this->translator->trans('onoffice_import.settings.marketingType.0', [], 'contao_default'),
-                                $this->translator->trans('onoffice_import.settings.marketingType.1', [], 'contao_default'),
-                            ],
-                            'inputType' => 'select',
-                            'options' => [
-                                '' => '-',
-                                'kauf' => $this->translator->trans('onoffice_import.settings.marketingType.buy', [], 'contao_default'),
-                                'miete' => $this->translator->trans('onoffice_import.settings.marketingType.rent', [], 'contao_default'),
-                            ],
-                            'required' => true,
-                        ],
-                        'regions' => [
-                            'label' => [
-                                $this->translator->trans('onoffice_import.settings.import_regions.0', [], 'contao_default'),
-                                $this->translator->trans('onoffice_import.settings.import_regions.1', [], 'contao_default'),
-                            ],
-                            'inputType' => 'checkbox',
-                            'required' => false,
-                        ],
-                    ],
-                    $arrDefaultFields
-                ),
-            ],
-        ];
+        $this->addRegions();
+        $this->addObjectTypes();
+        $this->addSearchCriteria();
 
+        // Render template
         return new Response($this->twig->render(
             '@EstateManagerOnOfficeApiImport/be_onoffice_import.html.twig',
             [
@@ -144,8 +84,109 @@ class BackendModuleController extends AbstractController
                     'settings' => $this->translator->trans('onoffice_import.button_settings', [], 'contao_default'),
                     'confirm' => $this->translator->trans('onoffice_import.confirm_import', [], 'contao_default'),
                 ],
-                'modules' => $arrModules,
+                'modules' => $this->modules,
+                'sections' => $this->sections
             ]
         ));
+    }
+
+    private function addRegions(): void
+    {
+        $this->modules[] = [
+            'name' => $this->translator->trans('onoffice_import.regions.title', [], 'contao_default'),
+            'desc' => $this->translator->trans('onoffice_import.regions.desc', [], 'contao_default'),
+            'module' => 'regions',
+            'exists' => \array_key_exists('RegionEntity', $this->bundles),
+            'fields' => array_merge(
+                [
+                    'language' => [
+                        'label' => [
+                            $this->translator->trans('onoffice_import.settings.language.0', [], 'contao_default'),
+                            $this->translator->trans('onoffice_import.settings.language.1', [], 'contao_default'),
+                        ],
+                        'inputType' => 'text',
+                        'required' => true,
+                    ],
+                ],
+                $this->defaultSettings
+            ),
+        ];
+    }
+
+    private function addObjectTypes(): void
+    {
+        $this->modules[] = [
+            'name' => $this->translator->trans('onoffice_import.objectTypes.title', [], 'contao_default'),
+            'desc' => $this->translator->trans('onoffice_import.objectTypes.desc', [], 'contao_default'),
+            'module' => 'objectTypes',
+            'exists' => \array_key_exists('ObjectTypeEntity', $this->bundles),
+            'fields' => array_merge(
+                [
+                    'language' => [
+                        'label' => [
+                            $this->translator->trans('onoffice_import.settings.language.0', [], 'contao_default'),
+                            $this->translator->trans('onoffice_import.settings.language.1', [], 'contao_default'),
+                        ],
+                        'inputType' => 'text',
+                        'required' => true,
+                    ],
+                ],
+                $this->defaultSettings
+            ),
+        ];
+    }
+
+    private function addSearchCriteria(): void
+    {
+        $this->modules[] = [
+            'name' => $this->translator->trans('onoffice_import.searchCriteria.title', [], 'contao_default'),
+            'desc' => $this->translator->trans('onoffice_import.searchCriteria.desc', [], 'contao_default'),
+            'module' => 'searchCriteria',
+            'exists' => \array_key_exists('EstateManagerLeadMatchingTool', $this->bundles),
+            'fields' => array_merge(
+                [
+                    'marketingType' => [
+                        'label' => [
+                            $this->translator->trans('onoffice_import.settings.marketingType.0', [], 'contao_default'),
+                            $this->translator->trans('onoffice_import.settings.marketingType.1', [], 'contao_default'),
+                        ],
+                        'inputType' => 'select',
+                        'options' => [
+                            '' => '-',
+                            'kauf' => $this->translator->trans('onoffice_import.settings.marketingType.buy', [], 'contao_default'),
+                            'miete' => $this->translator->trans('onoffice_import.settings.marketingType.rent', [], 'contao_default'),
+                        ],
+                        'required' => true,
+                    ],
+                    'regions' => [
+                        'label' => [
+                            $this->translator->trans('onoffice_import.settings.import_regions.0', [], 'contao_default'),
+                            $this->translator->trans('onoffice_import.settings.import_regions.1', [], 'contao_default'),
+                        ],
+                        'inputType' => 'checkbox',
+                        'required' => false,
+                    ],
+                ],
+                $this->defaultSettings
+            ),
+        ];
+
+        $this->sections['cron'] = [
+            'label' => $this->translator->trans('onoffice_import.sections.labelCron', [], 'contao_default'),
+            'list' => [
+                [
+                    'title' => $this->translator->trans('onoffice_import.sections.cronCreateSearchCriteria.0', [], 'contao_default'),
+                    'desc' => $this->translator->trans('onoffice_import.sections.cronCreateSearchCriteria.1', [], 'contao_default'),
+                    'content' => '/onoffice/create/searchCriteria',
+                    'c2a' => '/onoffice/create/searchCriteria'
+                ],
+                [
+                    'title' => $this->translator->trans('onoffice_import.sections.cronUpdateSearchCriteria.0', [], 'contao_default'),
+                    'desc' => $this->translator->trans('onoffice_import.sections.cronUpdateSearchCriteria.1', [], 'contao_default'),
+                    'content' => '/onoffice/update/searchCriteria',
+                    'c2a' => '/onoffice/update/searchCriteria'
+                ]
+            ]
+        ];
     }
 }

@@ -68,11 +68,32 @@
       </trans-unit>
       <trans-unit id="onoffice_import.settings.import_regions.0">
         <source>Connect region (low performance)</source>
-        <target>Regionen verbinden (low performance)</target>
+        <target>Regionen verbinden (nicht empfohlen)</target>
       </trans-unit>
       <trans-unit id="onoffice_import.settings.import_regions.1">
         <source>Connects the search request with available regions in the system. Works only with regions imported from onOffice. If a proximity search is used, this function is not needed.</source>
         <target>Verbindet den Suchauftrag mit verfügbaren Regionen im System. Funktioniert nur mit Regionen, welche aus onOffice importiert wurden. Sollte eine Umkreissuche verwendet werden, wird diese Funktion nicht benötigt.</target>
+      </trans-unit>
+
+      <trans-unit id="onoffice_import.sections.labelCron">
+        <source>Cronjobs</source>
+        <target>Cronjobs</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.sections.cronCreateSearchCriteria.0">
+        <source>Import search criteria</source>
+        <target>Suchanfragen importieren</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.sections.cronCreateSearchCriteria.1">
+        <source>Set up this cronjob to regularly synchronize new searches with the system.</source>
+        <target>Richten Sie diesen Cronjob ein, um regelmäßig neue Suchanfragen mit dem System zu synchronisieren.</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.sections.cronUpdateSearchCriteria.0">
+        <source>Update / Delete search criteria</source>
+        <target>Suchanfragen aktualisieren / löschen</target>
+      </trans-unit>
+      <trans-unit id="onoffice_import.sections.cronUpdateSearchCriteria.1">
+        <source>Set up this cronjob to regularly update the search queries that exist in the system. If a record no longer exists in onOffice, it will be deleted.</source>
+        <target>Richten Sie diesen Cronjob ein, um regelmäßig die im System vorhanden Suchanfragen zu aktualisieren. Sofern ein Datensatz nicht mehr in onOffice existiert, wird dieser gelöscht.</target>
       </trans-unit>
 
       <trans-unit id="onoffice_import.button_settings">

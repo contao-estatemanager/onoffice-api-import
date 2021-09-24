@@ -57,6 +57,22 @@
         <source>Connects the search request with available regions in the system. Works only with regions imported from onOffice. If a proximity search is used, this function is not needed.</source>
       </trans-unit>
 
+      <trans-unit id="onoffice_import.sections.labelCron">
+        <source>Cronjobs</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.sections.cronCreateSearchCriteria.0">
+        <source>Import search criteria</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.sections.cronCreateSearchCriteria.1">
+        <source>Set up this cronjob to regularly synchronize new searches with the system.</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.sections.cronUpdateSearchCriteria.0">
+        <source>Update / Delete search criteria</source>
+      </trans-unit>
+      <trans-unit id="onoffice_import.sections.cronUpdateSearchCriteria.1">
+        <source>Set up this cronjob to regularly update the search queries that exist in the system. If a record no longer exists in onOffice, it will be deleted.</source>
+      </trans-unit>
+
       <trans-unit id="onoffice_import.button_settings">
         <source>Settings</source>
       </trans-unit>

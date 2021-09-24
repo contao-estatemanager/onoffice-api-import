@@ -78,6 +78,26 @@
                 </div>
             {% endfor %}
         </div>
+
+        <div class="section_wrap">
+            {% for key, section in sections %}
+                <fieldset class="section" id="{{ key }}">
+                    <legend>{{ section.label }}</legend>
+                    {% for item in section.list %}
+                        <div class="item">
+                            <h3>{{ item.title }}</h3>
+                            <p>{{ item.desc }}</p>
+                            <div>
+                                {{ item.content }}
+                                {% if item.c2a %}
+                                    <a href="{{ item.c2a }}" class="tl_submit" target="_blank">&#x2197;</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </fieldset>
+            {% endfor %}
+        </div>
     </div>
 
     <script>

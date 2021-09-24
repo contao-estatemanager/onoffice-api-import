@@ -34,8 +34,6 @@ class RegionImport
 
     /**
      * Fetch all regions and prepare database.
-     *
-     * @param mixed|null $attributes
      */
     public function fetch(?array $attributes = null): array
     {
@@ -44,7 +42,7 @@ class RegionImport
         return [
             'message' => 'Please wait, the data will be imported',
             'countAbsolute' => $arrData['data']['meta']['cntabsolute'] ?? 0,
-            'simulateProgress' => 15,
+            'simulateProgress' => 5,
             'task' => [
                 'action' => '/onoffice/import/regions',
                 'data' => $arrData['data']['records'],
@@ -55,9 +53,6 @@ class RegionImport
 
     /**
      * Import root language and regions.
-     *
-     * @param $arrRecords
-     * @param $rootLanguage
      */
     public function import($arrRecords, $rootLanguage): array
     {
@@ -99,9 +94,6 @@ class RegionImport
 
     /**
      * Import a single region.
-     *
-     * @param $arrRecord
-     * @param null $parentId
      */
     public function importRegion($arrRecord, $parentId = null): void
     {

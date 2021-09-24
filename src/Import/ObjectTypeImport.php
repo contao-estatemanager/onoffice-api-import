@@ -43,7 +43,7 @@ class ObjectTypeImport
         return [
             'message' => 'Please wait, the data will be imported',
             'countAbsolute' => \count($arrObjectTypes ?? []),
-            'simulateProgress' => 30,
+            'simulateProgress' => 5,
             'task' => [
                 'action' => '/onoffice/import/objectTypes',
                 'data' => $arrObjectTypes,
@@ -53,8 +53,6 @@ class ObjectTypeImport
 
     /**
      * Import object types.
-     *
-     * @param $arrRecords
      */
     public function import($arrRecords): array
     {
