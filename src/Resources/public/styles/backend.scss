@@ -103,7 +103,7 @@
         transform: translateX(-50%) translateY(-50%);
 
         border-radius: 50%;
-        box-shadow: inset 1px 0 0 0 #78b178;
+        box-shadow: inset 1px 0 0 0 #f47c00;
         animation: spin 0.5s infinite linear;
       }
 
@@ -152,7 +152,7 @@
   margin-top: 35px;
 
   fieldset{
-    border: 1px solid #ccc;
+    border: 1px solid #e2e2e2;
     padding: 15px;
 
     legend{
@@ -170,9 +170,15 @@
   }
 
   .item{
+    position: relative;
     padding-bottom: 20px;
     margin-bottom: 20px;
     border-bottom: 1px solid #e6e6e8;
+
+    &.disabled{
+      pointer-events: none;
+      opacity: .5;
+    }
 
     &:last-child{
       padding-bottom: 0;
@@ -193,7 +199,7 @@
 
         color: #969696;
         background: rgb(244 124 0 / 5%);
-        border: 1px solid #ccc;
+        border: 1px solid #e2e2e2;
 
         border-radius: 4px;
         padding: 15px;

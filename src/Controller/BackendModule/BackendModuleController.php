@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ContaoEstateManager\OnOfficeApiImport\Controller\BackendModule;
 
+use Contao\Message;
 use Contao\System;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +38,8 @@ class BackendModuleController extends AbstractController
 
     private array $defaultSettings = [];
     private array $bundles = [];
+
+    private bool $showMessage = false;
 
     public function __construct(TwigEnvironment $twig, TranslatorInterface $translator)
     {
@@ -73,11 +76,18 @@ class BackendModuleController extends AbstractController
         $this->addObjectTypes();
         $this->addSearchCriteria();
 
+        // Check module message
+        if($this->showMessage)
+        {
+            Message::addInfo('Einige Funktionen stehen nicht zur Verfügung, da die entsprechenden Erweiterungen nicht installiert sind.');
+        }
+
         // Render template
         return new Response($this->twig->render(
             '@EstateManagerOnOfficeApiImport/be_onoffice_import.html.twig',
             [
                 'title' => $this->translator->trans('onoffice_import.title', [], 'contao_default'),
+                'message' => Message::generate(),
                 'texts' => [
                     'retrieve' => $this->translator->trans('onoffice_import.retrieve_data', [], 'contao_default'),
                     'import' => $this->translator->trans('onoffice_import.button_import', [], 'contao_default'),
@@ -85,7 +95,7 @@ class BackendModuleController extends AbstractController
                     'confirm' => $this->translator->trans('onoffice_import.confirm_import', [], 'contao_default'),
                 ],
                 'modules' => $this->modules,
-                'sections' => $this->sections
+                'sections' => $this->sections,
             ]
         ));
     }
@@ -96,7 +106,7 @@ class BackendModuleController extends AbstractController
             'name' => $this->translator->trans('onoffice_import.regions.title', [], 'contao_default'),
             'desc' => $this->translator->trans('onoffice_import.regions.desc', [], 'contao_default'),
             'module' => 'regions',
-            'exists' => \array_key_exists('RegionEntity', $this->bundles),
+            'exists' => $this->isAllowed('RegionEntity'),
             'fields' => array_merge(
                 [
                     'language' => [
@@ -119,7 +129,7 @@ class BackendModuleController extends AbstractController
             'name' => $this->translator->trans('onoffice_import.objectTypes.title', [], 'contao_default'),
             'desc' => $this->translator->trans('onoffice_import.objectTypes.desc', [], 'contao_default'),
             'module' => 'objectTypes',
-            'exists' => \array_key_exists('ObjectTypeEntity', $this->bundles),
+            'exists' => $this->isAllowed('ObjectTypeEntity'),
             'fields' => array_merge(
                 [
                     'language' => [
@@ -138,11 +148,13 @@ class BackendModuleController extends AbstractController
 
     private function addSearchCriteria(): void
     {
+        $bundleExists = $this->isAllowed('EstateManagerLeadMatchingTool');
+
         $this->modules[] = [
             'name' => $this->translator->trans('onoffice_import.searchCriteria.title', [], 'contao_default'),
             'desc' => $this->translator->trans('onoffice_import.searchCriteria.desc', [], 'contao_default'),
             'module' => 'searchCriteria',
-            'exists' => \array_key_exists('EstateManagerLeadMatchingTool', $this->bundles),
+            'exists' => $bundleExists,
             'fields' => array_merge(
                 [
                     'marketingType' => [
@@ -178,15 +190,29 @@ class BackendModuleController extends AbstractController
                     'title' => $this->translator->trans('onoffice_import.sections.cronCreateSearchCriteria.0', [], 'contao_default'),
                     'desc' => $this->translator->trans('onoffice_import.sections.cronCreateSearchCriteria.1', [], 'contao_default'),
                     'content' => '/onoffice/create/searchCriteria',
-                    'c2a' => '/onoffice/create/searchCriteria'
+                    'c2a' => '/onoffice/create/searchCriteria',
+                    'exists' => $bundleExists,
                 ],
                 [
                     'title' => $this->translator->trans('onoffice_import.sections.cronUpdateSearchCriteria.0', [], 'contao_default'),
                     'desc' => $this->translator->trans('onoffice_import.sections.cronUpdateSearchCriteria.1', [], 'contao_default'),
                     'content' => '/onoffice/update/searchCriteria',
-                    'c2a' => '/onoffice/update/searchCriteria'
-                ]
-            ]
+                    'c2a' => '/onoffice/update/searchCriteria',
+                    'exists' => $bundleExists,
+                ],
+            ],
         ];
+    }
+
+    private function isAllowed($bundleName): bool
+    {
+        $blnAllowed = \array_key_exists($bundleName, $this->bundles);
+
+        if(!$blnAllowed)
+        {
+            $this->showMessage = true;
+        }
+
+        return $blnAllowed;
     }
 }

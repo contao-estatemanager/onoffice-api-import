@@ -1,12 +1,15 @@
 {% extends "@ContaoCore/Backend/be_page.html.twig" %}
 
 {% block headline %}
-    {{ title|raw }}
+    {{ title }}
 {% endblock %}
 
 {% block error %}{% endblock %}
 
 {% block main %}
+    {% if message %}
+        {{ message|raw }}
+    {% endif %}
     <div class="tl_listing_container">
         <div class="import_wrap">
             {% for module in modules %}
@@ -84,7 +87,7 @@
                 <fieldset class="section" id="{{ key }}">
                     <legend>{{ section.label }}</legend>
                     {% for item in section.list %}
-                        <div class="item">
+                        <div class="item{{ item.exists ? '' : ' disabled' }}">
                             <h3>{{ item.title }}</h3>
                             <p>{{ item.desc }}</p>
                             <div>

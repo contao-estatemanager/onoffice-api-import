@@ -78,7 +78,7 @@
   transform-origin: center center;
   transform: translateX(-50%) translateY(-50%);
   border-radius: 50%;
-  box-shadow: inset 1px 0 0 0 #78b178;
+  box-shadow: inset 1px 0 0 0 #f47c00;
   animation: spin 0.5s infinite linear;
 }
 .import_wrap div.progress-info .info.success, .import_wrap div.progress-info .info.error {
@@ -118,7 +118,7 @@
   margin-top: 35px;
 }
 .section_wrap fieldset {
-  border: 1px solid #ccc;
+  border: 1px solid #e2e2e2;
   padding: 15px;
 }
 .section_wrap fieldset legend {
@@ -132,9 +132,14 @@
   margin-bottom: 10px;
 }
 .section_wrap .item {
+  position: relative;
   padding-bottom: 20px;
   margin-bottom: 20px;
   border-bottom: 1px solid #e6e6e8;
+}
+.section_wrap .item.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 .section_wrap .item:last-child {
   padding-bottom: 0;
@@ -147,7 +152,7 @@
   font-size: 14px;
   color: #969696;
   background: rgba(244, 124, 0, 0.05);
-  border: 1px solid #ccc;
+  border: 1px solid #e2e2e2;
   border-radius: 4px;
   padding: 15px;
 }

@@ -5,14 +5,18 @@
         <source>Import data from onOffice</source>
         <target>Daten aus onOffice importieren</target>
       </trans-unit>
+      <trans-unit id="onoffice_import.message">
+        <source>Some functions are not available because the corresponding extensions are not installed.</source>
+        <target>Einige Funktionen stehen nicht zur Verfügung, da die entsprechenden Erweiterungen nicht installiert sind.</target>
+      </trans-unit>
 
       <trans-unit id="onoffice_import.regions.title">
         <source>Regions</source>
         <target>Regionen</target>
       </trans-unit>
       <trans-unit id="onoffice_import.regions.desc">
-        <source>Imports regions from onOffice</source>
-        <target>Importiert Regionen aus onOffice</target>
+        <source>Imports regions based on the selected language (ISO-639; e.g. DEU, ENG) from onOffice.</source>
+        <target>Importiert Regionen anhand der gewählten Sprache (ISO-639; Bspw. DEU, ENG) aus onOffice.</target>
       </trans-unit>
 
       <trans-unit id="onoffice_import.objectTypes.title">
@@ -20,8 +24,8 @@
         <target>Objekttypen</target>
       </trans-unit>
       <trans-unit id="onoffice_import.objectTypes.desc">
-        <source>Imports object types from onOffice</source>
-        <target>Importiert Objekttypen aus onOffice</target>
+        <source>Imports object types based on the selected language (ISO-639; e.g. DEU, ENG) from onOffice.</source>
+        <target>Importiert Objekttypen anhand der gewählten Sprache (ISO-639; Bspw. DEU, ENG) aus onOffice.</target>
       </trans-unit>
 
       <trans-unit id="onoffice_import.searchCriteria.title">
@@ -30,7 +34,7 @@
       </trans-unit>
       <trans-unit id="onoffice_import.searchCriteria.desc">
         <source>Imports search inquiries from onOffice</source>
-        <target>Importiert Suchanfragen aus onOffice</target>
+        <target>Importiert alle Suchanfragen anhand einer bestimmten Vermarktungsart aus onOffice.</target>
       </trans-unit>
 
 
@@ -71,8 +75,8 @@
         <target>Regionen verbinden (nicht empfohlen)</target>
       </trans-unit>
       <trans-unit id="onoffice_import.settings.import_regions.1">
-        <source>Connects the search request with available regions in the system. Works only with regions imported from onOffice. If a proximity search is used, this function is not needed.</source>
-        <target>Verbindet den Suchauftrag mit verfügbaren Regionen im System. Funktioniert nur mit Regionen, welche aus onOffice importiert wurden. Sollte eine Umkreissuche verwendet werden, wird diese Funktion nicht benötigt.</target>
+        <source>Connects the search request with available regions in the system. Works only with regions imported from onOffice. Instead of a fixed assignment of regions, it is recommended to use the proximity search.</source>
+        <target>Verbindet den Suchauftrag mit verfügbaren Regionen im System. Funktioniert nur mit Regionen, welche aus onOffice importiert wurden. Statt einer festen Zuweisung der Regionen, wird empfohlen die Umkreissuche zu verwenden.</target>
       </trans-unit>
 
       <trans-unit id="onoffice_import.sections.labelCron">

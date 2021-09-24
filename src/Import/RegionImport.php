@@ -42,7 +42,7 @@ class RegionImport
         return [
             'message' => 'Please wait, the data will be imported',
             'countAbsolute' => $arrData['data']['meta']['cntabsolute'] ?? 0,
-            'simulateProgress' => 5,
+            'simulateProgress' => 1,
             'task' => [
                 'action' => '/onoffice/import/regions',
                 'data' => $arrData['data']['records'],
@@ -74,7 +74,7 @@ class RegionImport
             $objRoot->save();
         }
 
-        $rootId = $objRoot->id;
+        $rootId = (int) $objRoot->id;
 
         foreach ($arrRecords as $arrRecord)
         {
@@ -95,7 +95,7 @@ class RegionImport
     /**
      * Import a single region.
      */
-    public function importRegion($arrRecord, $parentId = null): void
+    public function importRegion($arrRecord, ?int $parentId = null): void
     {
         $objRegion = new RegionModel();
         $objRegion->type = 'regular';
@@ -118,7 +118,7 @@ class RegionImport
         {
             foreach ($arrRecord['children'] as $arrChildren)
             {
-                $this->importRegion($arrChildren, $objRegion->id);
+                $this->importRegion($arrChildren, (int) $objRegion->id);
             }
         }
     }
