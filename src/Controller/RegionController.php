@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ContaoEstateManager\OnOfficeApiImport\Controller;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use ContaoEstateManager\OnOfficeApiImport\Import\RegionImport;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RegionController
 {
+    private RegionImport $importer;
+
+    public function __construct(ContaoFramework $framework)
+    {
+        $framework->initialize();
+
+        $this->importer = new RegionImport();
+    }
+
     /**
      * Fetch regions from onOffice.
      *
@@ -31,14 +41,12 @@ class RegionController
      */
     public function fetch(Request $request): JsonResponse
     {
-        $regionImporter = new RegionImport();
-
         if ($request->get('truncate') ?? false)
         {
-            $regionImporter->truncate();
+            $this->importer->truncate();
         }
 
-        $arrData = $regionImporter->fetch([
+        $arrData = $this->importer->fetch([
             'language' => $request->get('language'),
         ]);
 
@@ -52,11 +60,9 @@ class RegionController
      */
     public function import(Request $request): JsonResponse
     {
-        $regionImporter = new RegionImport();
-
         $arrRequest = $request->toArray();
 
-        $arrData = $regionImporter->import($arrRequest['data'], $arrRequest['language']);
+        $arrData = $this->importer->import($arrRequest['data'], $arrRequest['language']);
 
         return new JsonResponse($arrData);
     }

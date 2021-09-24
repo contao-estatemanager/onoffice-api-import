@@ -19,55 +19,55 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class SearchCriteriaMapper
 {
     /**
-     * Record id
+     * Record id.
      */
     private ?int $id;
 
     /**
-     * Record
+     * Record.
      */
     private ?array $record;
 
     /**
-     * Schema
+     * Schema.
      */
     private ?int $schema;
 
     /**
-     * Object types
+     * Object types.
      */
     private ?array $bag;
 
     /**
-     * Schemas
+     * Schemas.
      */
     public const SCHEMA_FLAT = 1;
     public const SCHEMA_RANGE = 2;
 
     /**
-     * Create Mapper Instance
+     * Create Mapper Instance.
      */
-    public function __construct(?array $record=null)
+    public function __construct(?array $record = null)
     {
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
 
-        if($record)
+        if ($record)
         {
             $this->setRecord($record);
         }
     }
 
     /**
-     * Set new record
+     * Set new record.
      */
     public function setRecord(array $record): void
     {
-        if(array_key_exists('id', $record))
+        if (\array_key_exists('id', $record))
         {
             $this->id = $record['id'];
         }
 
-        if(array_key_exists('elements', $record))
+        if (\array_key_exists('elements', $record))
         {
             $record = $record['elements'];
         }
@@ -76,7 +76,7 @@ class SearchCriteriaMapper
     }
 
     /**
-     * Return current record
+     * Return current record.
      */
     public function getRecord(): ?array
     {
@@ -84,7 +84,7 @@ class SearchCriteriaMapper
     }
 
     /**
-     * Return current record id
+     * Return current record id.
      */
     public function getId(): ?int
     {
@@ -92,7 +92,7 @@ class SearchCriteriaMapper
     }
 
     /**
-     * Set mapping schema
+     * Set mapping schema.
      */
     public function setSchema(int $schema): void
     {
@@ -100,11 +100,11 @@ class SearchCriteriaMapper
     }
 
     /**
-     * Set bag
+     * Set bag.
      */
     public function setBag(?array $bag): void
     {
-        if(null === $bag)
+        if (null === $bag)
         {
             return;
         }
@@ -113,7 +113,7 @@ class SearchCriteriaMapper
     }
 
     /**
-     * Return bag
+     * Return bag.
      */
     public function getBag(): ?array
     {
@@ -121,28 +121,28 @@ class SearchCriteriaMapper
     }
 
     /**
-     * Check if mapper has data
+     * Check if mapper has data.
      */
     public function hasData(): bool
     {
-        return $this->record !== null;
+        return null !== $this->record;
     }
 
     /**
-     * Executes the mapping and return the new structure
+     * Executes the mapping and return the new structure.
      */
-    public function apply($allowEmpty=false): ?array
+    public function apply($allowEmpty = false): ?array
     {
-        if(!$this->schema)
+        if (!$this->schema)
         {
-            trigger_error('No schema declaired', E_USER_ERROR);
+            trigger_error('No schema declaired', \E_USER_ERROR);
         }
 
         $mapping = [];
 
         foreach ($this->getStructure() as $field => $map)
         {
-            if(($value = $this->getValue($map)) || $allowEmpty)
+            if (($value = $this->getValue($map)) || $allowEmpty)
             {
                 $mapping[$field] = $value;
             }
@@ -152,7 +152,7 @@ class SearchCriteriaMapper
     }
 
     /**
-     * Return structure map by current schema
+     * Return structure map by current schema.
      */
     private function getStructure(): ?array
     {
@@ -175,11 +175,11 @@ class SearchCriteriaMapper
                     'postalcode' => ['serialize', ['[range_plz]']],
                     'price_from' => ['condition', [
                         ['[kaufpreis__von]', '[kaltmiete__von]'],
-                        ['[vermarktungsart]', 'kauf']
+                        ['[vermarktungsart]', 'kauf'],
                     ]],
                     'price_to' => ['condition', [
                         ['[kaufpreis__bis]', '[kaltmiete__bis]'],
-                        ['[vermarktungsart]', 'kauf']
+                        ['[vermarktungsart]', 'kauf'],
                     ]],
                     'objectType' => ['keyInBag', ['[objektart]']],
                 ];
@@ -198,23 +198,22 @@ class SearchCriteriaMapper
                     'postalcode' => ['serialize', ['[Umkreis][range_plz]']],
                     'price_from' => ['condition', [
                         ['[range_kaufpreis][0]', '[range_kaltmiete][0]'],
-                        ['[vermarktungsart][0]', 'kauf']
+                        ['[vermarktungsart][0]', 'kauf'],
                     ]],
                     'price_to' => ['condition', [
                         ['[range_kaufpreis][1]', '[range_kaltmiete][1]'],
-                        ['[vermarktungsart][0]', 'kauf']
+                        ['[vermarktungsart][0]', 'kauf'],
                     ]],
                     'objectType' => ['keyInBag', ['[objektart][0]']],
                 ];
                 break;
-
         }
 
         return $structure;
     }
 
     /**
-     * Return value by structure map
+     * Return value by structure map.
      */
     private function getValue($map): ?string
     {
@@ -223,22 +222,22 @@ class SearchCriteriaMapper
             return $this->propertyAccessor->getValue($this->record, $map);
         }
 
-        if(\is_array($map))
+        if (\is_array($map))
         {
-            return call_user_func_array("self::" . $map[0], (array) $map[1]);
+            return \call_user_func_array('self::'.$map[0], (array) $map[1]);
         }
 
         return null;
     }
 
     /**
-     * Value function: Serialize value
+     * Value function: Serialize value.
      */
     private function serialize($field): ?string
     {
         $value = $this->propertyAccessor->getValue($this->record, $field);
 
-        if($value)
+        if ($value)
         {
             return serialize((array) $value);
         }
@@ -247,13 +246,13 @@ class SearchCriteriaMapper
     }
 
     /**
-     * Value function: Get value by condition
+     * Value function: Get value by condition.
      */
     private function condition(array $fields, array $condition): ?string
     {
         $conditionValue = $this->propertyAccessor->getValue($this->record, $condition[0]);
 
-        if($conditionValue === $condition[1])
+        if ($conditionValue === $condition[1])
         {
             return $this->propertyAccessor->getValue($this->record, $fields[0]);
         }
@@ -262,7 +261,7 @@ class SearchCriteriaMapper
     }
 
     /**
-     * Value function: Check matching key in bag
+     * Value function: Check matching key in bag.
      */
     private function keyInBag($field): ?string
     {

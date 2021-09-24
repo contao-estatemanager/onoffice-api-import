@@ -26,27 +26,27 @@ use Oveleon\ContaoOnofficeApiBundle\OnOfficeRead;
 class SearchCriteriaImport
 {
     /**
-     * onOffice Handler
+     * onOffice Handler.
      */
     private OnOfficeRead $onOfficeHandler;
 
     /**
-     * Search criteria mapper
+     * Search criteria mapper.
      */
     private SearchCriteriaMapper $mapper;
 
     /**
-     * Current count
+     * Current count.
      */
     private int $intCount = 0;
 
     /**
-     * Import steps
+     * Import steps.
      */
     public const LIMIT = 500;
 
     /**
-     * Construct
+     * Construct.
      */
     public function __construct()
     {
@@ -58,7 +58,7 @@ class SearchCriteriaImport
     }
 
     /**
-     * Get all search criteria from onOffice by given attributes
+     * Get all search criteria from onOffice by given attributes.
      */
     public function getAllSearchCriteria($attributes)
     {
@@ -70,7 +70,7 @@ class SearchCriteriaImport
     }
 
     /**
-     * Return search criteria by their id
+     * Return search criteria by their id.
      */
     public function getSearchCriteriaById($id)
     {
@@ -82,7 +82,7 @@ class SearchCriteriaImport
     }
 
     /**
-     * Fetch all search criteria
+     * Fetch all search criteria.
      */
     public function fetchPartialImport(?array $attributes = null, bool $importRegions = false): array
     {
@@ -101,7 +101,7 @@ class SearchCriteriaImport
     }
 
     /**
-     * Import search criteria
+     * Import search criteria.
      */
     public function partialImport($attributes, bool $importRegions = false): array
     {
@@ -155,16 +155,16 @@ class SearchCriteriaImport
     }
 
     /**
-     * Update a single search criteria record or delete if not exists anymore
+     * Update a single search criteria record or delete if not exists anymore.
      */
-    public function singleUpdate()
+    public function singleUpdate(): void
     {
         // Fetch the oldest record
-        $objSearchCriteria = SearchCriteriaModel::findOneBy(['vid!=?'], [""], [
-           'order' => 'tstamp DESC'
+        $objSearchCriteria = SearchCriteriaModel::findOneBy(['vid!=?'], [''], [
+            'order' => 'tstamp DESC',
         ]);
 
-        if(null === $objSearchCriteria)
+        if (null === $objSearchCriteria)
         {
             return;
         }
@@ -172,15 +172,12 @@ class SearchCriteriaImport
         // Fetch record data from onOffice
         $arrSearchCriteria = $this->getSearchCriteriaById($objSearchCriteria->vid);
 
-        // Reduce data to the record
-        $record = $arrSearchCriteria['data']['records'][0] ?? null;
-
-        // Set mapper bag
-        $this->mapper->setBag($this->createObjectTypeBag());
-
         // Update
-        if($record)
+        if ($record = ($arrSearchCriteria['data']['records'][0] ?? null))
         {
+            // Set mapper bag
+            $this->mapper->setBag($this->createObjectTypeBag());
+
             // Set new record
             $this->mapper->setRecord($record);
 
@@ -195,7 +192,49 @@ class SearchCriteriaImport
     }
 
     /**
-     * Import search criteria record
+     * Creates a single search criteria.
+     */
+    public function singleCreate(): void
+    {
+        $strTable = SearchCriteriaModel::getTable();
+
+        // Fetch latest search criteria
+        $objSearchCriteria = Database::getInstance()->execute("SELECT MAX(vid) as vid FROM $strTable");
+
+        if (null === $objSearchCriteria)
+        {
+            return;
+        }
+
+        $intLatestId = (int) $objSearchCriteria->vid;
+        $intConnections = 3;
+
+        // Set mapper bag
+        $this->mapper->setBag($this->createObjectTypeBag());
+
+        for ($i = 0; $i < $intConnections; ++$i)
+        {
+            // Set next id
+            ++$intLatestId;
+
+            // Check if a record exists with the next id
+            $arrSearchCriteria = $this->getSearchCriteriaById($intLatestId);
+
+            if ($record = ($arrSearchCriteria['data']['records'][0] ?? null))
+            {
+                // Set new record
+                $this->mapper->setRecord($record);
+
+                // Update record
+                $this->import();
+
+                break;
+            }
+        }
+    }
+
+    /**
+     * Import search criteria record.
      */
     private function import(bool $importRegions = false): void
     {
@@ -246,13 +285,13 @@ class SearchCriteriaImport
     }
 
     /**
-     * Creates a new bag of object types
+     * Creates a new bag of object types.
      */
-    private function createObjectTypeBag()
+    private function createObjectTypeBag(): ?array
     {
         $objectTypes = ObjectTypeModel::findAll();
 
-        if(null === $objectTypes)
+        if (null === $objectTypes)
         {
             return null;
         }
@@ -268,7 +307,7 @@ class SearchCriteriaImport
     }
 
     /**
-     * Truncate table
+     * Truncate table.
      */
     public function truncate(): void
     {

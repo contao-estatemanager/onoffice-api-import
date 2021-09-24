@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ContaoEstateManager\OnOfficeApiImport\Controller;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use ContaoEstateManager\OnOfficeApiImport\Import\SearchCriteriaImport;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,21 +25,28 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SearchCriteriaController
 {
+    private SearchCriteriaImport $importer;
+
+    public function __construct(ContaoFramework $framework)
+    {
+        $framework->initialize();
+
+        $this->importer = new SearchCriteriaImport();
+    }
+
     /**
      * Fetch search criteria from onOffice.
      *
      * @Route("/onoffice/fetch/searchCriteria", name="onoffice_fetch_searchcriteria")
      */
-    public function fetch(Request $request): JsonResponse
+    public function fetchPartialImport(Request $request): JsonResponse
     {
-        $searchCriteriaImporter = new SearchCriteriaImport();
-
         if ($request->get('truncate') ?? false)
         {
-            $searchCriteriaImporter->truncate();
+            $this->importer->truncate();
         }
 
-        $arrData = $searchCriteriaImporter->fetchPartialImport([
+        $arrData = $this->importer->fetchPartialImport([
             'offset' => 0,
             'limit' => 0,
             'outputall' => 0,
@@ -55,13 +63,11 @@ class SearchCriteriaController
      *
      * @Route("/onoffice/import/searchCriteria", name="onoffice_import_searchcriteria")
      */
-    public function import(Request $request): JsonResponse
+    public function partialImport(Request $request): JsonResponse
     {
-        $searchCriteriaImporter = new SearchCriteriaImport();
-
         $arrRequest = $request->toArray();
 
-        $arrData = $searchCriteriaImporter->partialImport([
+        $arrData = $this->importer->partialImport([
             'offset' => $arrRequest['offset'],
             'limit' => SearchCriteriaImport::LIMIT,
             'outputall' => 1,
@@ -78,10 +84,21 @@ class SearchCriteriaController
      *
      * @Route("/onoffice/update/searchCriteria", name="onoffice_update_searchcriteria")
      */
-    public function update(): JsonResponse
+    public function singleUpdate(): JsonResponse
     {
-        $searchCriteriaImporter = new SearchCriteriaImport();
-        $searchCriteriaImporter->singleUpdate();
+        $this->importer->singleUpdate();
+
+        return new JsonResponse(['ok']);
+    }
+
+    /**
+     * Update single search criteria.
+     *
+     * @Route("/onoffice/create/searchCriteria", name="onoffice_create_searchcriteria")
+     */
+    public function singleCreate(): JsonResponse
+    {
+        $this->importer->singleCreate();
 
         return new JsonResponse(['ok']);
     }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ContaoEstateManager\OnOfficeApiImport\Controller;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use ContaoEstateManager\OnOfficeApiImport\Import\ObjectTypeImport;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ObjectTypeController
 {
+    private ObjectTypeImport $importer;
+
+    public function __construct(ContaoFramework $framework)
+    {
+        $framework->initialize();
+
+        $this->importer = new ObjectTypeImport();
+    }
+
     /**
      * Fetch object types from onOffice.
      *
@@ -31,14 +41,12 @@ class ObjectTypeController
      */
     public function fetch(Request $request): JsonResponse
     {
-        $objectTypeImporter = new ObjectTypeImport();
-
         if ($request->get('truncate') ?? false)
         {
-            $objectTypeImporter->truncate();
+            $this->importer->truncate();
         }
 
-        $arrData = $objectTypeImporter->fetch([
+        $arrData = $this->importer->fetch([
             'language' => $request->get('language'),
             'labels' => true,
             'modules' => ['estate'],
@@ -54,11 +62,9 @@ class ObjectTypeController
      */
     public function import(Request $request): JsonResponse
     {
-        $regionImporter = new ObjectTypeImport();
-
         $arrRequest = $request->toArray();
 
-        $arrData = $regionImporter->import($arrRequest['data']);
+        $arrData = $this->importer->import($arrRequest['data']);
 
         return new JsonResponse($arrData);
     }
