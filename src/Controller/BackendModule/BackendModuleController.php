@@ -20,7 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment as TwigEnvironment;
+use Twig\Environment;
 
 /**
  * @Route("/contao/onoffice-import",
@@ -30,7 +30,7 @@ use Twig\Environment as TwigEnvironment;
  */
 class BackendModuleController extends AbstractController
 {
-    private TwigEnvironment $twig;
+    private Environment $twig;
     private TranslatorInterface $translator;
 
     private array $modules = [];
@@ -41,7 +41,7 @@ class BackendModuleController extends AbstractController
 
     private bool $showMessage = false;
 
-    public function __construct(TwigEnvironment $twig, TranslatorInterface $translator)
+    public function __construct(Environment $twig, TranslatorInterface $translator)
     {
         $this->twig = $twig;
         $this->translator = $translator;
