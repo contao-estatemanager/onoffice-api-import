@@ -28,12 +28,12 @@ class SearchCriteriaImport
     /**
      * onOffice Handler.
      */
-    private OnOfficeRead $onOfficeHandler;
+    private $onOfficeHandler;
 
     /**
      * Search criteria mapper.
      */
-    private SearchCriteriaMapper $mapper;
+    private $mapper;
 
     /**
      * Current count.

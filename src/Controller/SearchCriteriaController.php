@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SearchCriteriaController
 {
-    private SearchCriteriaImport $importer;
+    private $importer;
 
     public function __construct(ContaoFramework $framework)
     {

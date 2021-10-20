@@ -30,8 +30,8 @@ use Twig\Environment;
  */
 class BackendModuleController extends AbstractController
 {
-    private Environment $twig;
-    private TranslatorInterface $translator;
+    private $twig;
+    private $translator;
 
     private array $modules = [];
     private array $sections = [];

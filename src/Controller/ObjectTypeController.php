@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ObjectTypeController
 {
-    private ObjectTypeImport $importer;
+    private $importer;
 
     public function __construct(ContaoFramework $framework)
     {

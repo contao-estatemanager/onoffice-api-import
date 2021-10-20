@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RegionController
 {
-    private RegionImport $importer;
+    private $importer;
 
     public function __construct(ContaoFramework $framework)
     {

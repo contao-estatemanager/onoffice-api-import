@@ -20,7 +20,7 @@ use Oveleon\ContaoOnofficeApiBundle\OnOfficeRead;
 
 class RegionImport
 {
-    private OnOfficeRead $onOfficeHandler;
+    private $onOfficeHandler;
 
     private int $intCount = 0;
 
