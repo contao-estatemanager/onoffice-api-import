@@ -1,5 +1,6 @@
 {
   "name":"contao-estatemanager/onoffice-api-import",
+  "type":"contao-bundle",
   "description":"onOffice API Import Extension for Contao EstateManager",
   "keywords":["contao","estatemanager","realestate","estate","onoffice"],
   "homepage":"https://www.contao-estatemanager.com/",
