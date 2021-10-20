@@ -23,32 +23,32 @@ class AddonManager
     /**
      * Bundle name.
      */
-    public static string $bundle = 'EstateManagerOnOfficeApiImport';
+    public static $bundle = 'EstateManagerOnOfficeApiImport';
 
     /**
      * Package.
      */
-    public static string $package = 'contao-estatemanager/onoffice-api-import';
+    public static $package = 'contao-estatemanager/onoffice-api-import';
 
     /**
      * Addon config key.
      */
-    public static string $key = 'addon_onoffice_api_import_license';
+    public static $key = 'addon_onoffice_api_import_license';
 
     /**
      * Is initialized.
      */
-    public static bool $initialized = false;
+    public static $initialized = false;
 
     /**
      * Is valid.
      */
-    public static bool $valid = false;
+    public static $valid = false;
 
     /**
      * Licenses.
      */
-    private static array $licenses = [
+    private static $licenses = [
         'ca404a0f6089696267c3d12b55278ab4',
         'cdc712287a121b98cc99db67fb9bc700',
         'a9f71e816e72160166f8b6cd0c2a2479',

@@ -33,13 +33,13 @@ class BackendModuleController extends AbstractController
     private $twig;
     private $translator;
 
-    private array $modules = [];
-    private array $sections = [];
+    private $modules = [];
+    private $sections = [];
 
-    private array $defaultSettings = [];
-    private array $bundles = [];
+    private $defaultSettings = [];
+    private $bundles = [];
 
-    private bool $showMessage = false;
+    private $showMessage = false;
 
     public function __construct(Environment $twig, TranslatorInterface $translator)
     {

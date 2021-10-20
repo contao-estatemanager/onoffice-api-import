@@ -22,7 +22,7 @@ class ObjectTypeImport
 {
     private $onOfficeHandler;
 
-    private int $intCount = 0;
+    private $intCount = 0;
 
     /**
      * Construct.

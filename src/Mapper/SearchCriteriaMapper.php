@@ -21,22 +21,22 @@ class SearchCriteriaMapper
     /**
      * Record id.
      */
-    private ?int $id;
+    private $id;
 
     /**
      * Record.
      */
-    private ?array $record;
+    private $record;
 
     /**
      * Schema.
      */
-    private ?int $schema;
+    private $schema;
 
     /**
      * Object types.
      */
-    private ?array $bag;
+    private $bag;
 
     /**
      * Schemas.

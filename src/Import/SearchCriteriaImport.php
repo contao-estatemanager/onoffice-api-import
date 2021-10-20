@@ -38,7 +38,7 @@ class SearchCriteriaImport
     /**
      * Current count.
      */
-    private int $intCount = 0;
+    private $intCount = 0;
 
     /**
      * Import steps.
