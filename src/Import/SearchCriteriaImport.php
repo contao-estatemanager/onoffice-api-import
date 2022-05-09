@@ -21,14 +21,14 @@ use ContaoEstateManager\OnOfficeApiImport\Mapper\SearchCriteriaMapper;
 use ContaoEstateManager\RegionEntity\Region;
 use ContaoEstateManager\RegionEntity\RegionConnectionModel;
 use ContaoEstateManager\RegionEntity\RegionModel;
-use Oveleon\ContaoOnofficeApiBundle\OnOfficeRead;
+use Oveleon\ContaoOnofficeApiBundle\Controller\ReadController;
 
 class SearchCriteriaImport
 {
     /**
      * onOffice Handler.
      */
-    private OnOfficeRead $onOfficeHandler;
+    private ReadController $onOfficeHandler;
 
     /**
      * Search criteria mapper.
@@ -54,7 +54,7 @@ class SearchCriteriaImport
         $this->mapper = new SearchCriteriaMapper();
 
         // Create onOffice handler
-        $this->onOfficeHandler = new OnOfficeRead();
+        $this->onOfficeHandler = new ReadController();
     }
 
     /**

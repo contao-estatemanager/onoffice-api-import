@@ -16,11 +16,11 @@ namespace ContaoEstateManager\OnOfficeApiImport\Import;
 
 use Contao\Database;
 use ContaoEstateManager\ObjectTypeEntity\ObjectTypeModel;
-use Oveleon\ContaoOnofficeApiBundle\OnOfficeRead;
+use Oveleon\ContaoOnofficeApiBundle\Controller\ReadController;
 
 class ObjectTypeImport
 {
-    private OnOfficeRead $onOfficeHandler;
+    private ReadController $onOfficeHandler;
 
     private int $intCount = 0;
 
@@ -29,7 +29,7 @@ class ObjectTypeImport
      */
     public function __construct()
     {
-        $this->onOfficeHandler = new OnOfficeRead();
+        $this->onOfficeHandler = new ReadController();
     }
 
     /**

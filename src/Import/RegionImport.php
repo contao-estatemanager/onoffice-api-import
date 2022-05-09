@@ -16,11 +16,11 @@ namespace ContaoEstateManager\OnOfficeApiImport\Import;
 
 use Contao\Database;
 use ContaoEstateManager\RegionEntity\RegionModel;
-use Oveleon\ContaoOnofficeApiBundle\OnOfficeRead;
+use Oveleon\ContaoOnofficeApiBundle\Controller\ReadController;
 
 class RegionImport
 {
-    private OnOfficeRead $onOfficeHandler;
+    private ReadController $onOfficeHandler;
 
     private int $intCount = 0;
 
@@ -29,7 +29,7 @@ class RegionImport
      */
     public function __construct()
     {
-        $this->onOfficeHandler = new OnOfficeRead();
+        $this->onOfficeHandler = new ReadController();
     }
 
     /**
@@ -37,7 +37,13 @@ class RegionImport
      */
     public function fetch(?array $attributes = null): array
     {
-        $arrData = $this->onOfficeHandler->run('regions', null, null, $attributes, true);
+        $arrData = $this->onOfficeHandler->run(
+            'regions',
+            null,
+            null,
+            $attributes,
+            true
+        );
 
         return [
             'message' => 'Please wait, the data will be imported',

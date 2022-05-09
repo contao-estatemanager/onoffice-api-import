@@ -16,7 +16,7 @@
     "php":"^7.4 || ^8.0",
     "contao/core-bundle":"^4.9",
     "contao-estatemanager/core": "^1.0",
-    "oveleon/contao-onoffice-api-bundle": "^2.0"
+    "oveleon/contao-onoffice-api-bundle": "^3.0"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.0",
