@@ -62,7 +62,9 @@ class ObjectTypeController
      */
     public function import(Request $request): JsonResponse
     {
-        $arrData = $this->importer->import($request->get('data'));
+        $req = json_decode($request->getContent(), true);
+
+        $arrData = $this->importer->import($req['data']);
 
         return new JsonResponse($arrData);
     }

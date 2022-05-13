@@ -65,14 +65,16 @@ class SearchCriteriaController
      */
     public function partialImport(Request $request): JsonResponse
     {
+        $req = json_decode($request->getContent(), true);
+
         $arrData = $this->importer->partialImport([
-            'offset' => $request->get('offset'),
+            'offset' => $req['offset'],
             'limit' => SearchCriteriaImport::LIMIT,
             'outputall' => 1,
             'searchdata' => [
-                'vermarktungsart' => $request->get('marketingType'),
+                'vermarktungsart' => $req['marketingType'],
             ],
-        ], (bool) $request->get('regions'));
+        ], (bool) $req['regions']);
 
         return new JsonResponse($arrData);
     }
