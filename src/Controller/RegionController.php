@@ -60,9 +60,7 @@ class RegionController
      */
     public function import(Request $request): JsonResponse
     {
-        $arrRequest = $request->toArray();
-
-        $arrData = $this->importer->import($arrRequest['data'], $arrRequest['language']);
+        $arrData = $this->importer->import($request->get('data'), $request->get('language'));
 
         return new JsonResponse($arrData);
     }
