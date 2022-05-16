@@ -55,6 +55,11 @@ class BackendMenuListener
 
         $contentNode = $tree->getChild('onoffice');
 
+        if(!$contentNode)
+        {
+            return;
+        }
+
         $node = $factory
             ->createItem('onoffice-import')
             ->setUri($this->router->generate(BackendModuleController::class))
