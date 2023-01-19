@@ -135,7 +135,7 @@ class SearchCriteriaMapper
     {
         if (!$this->schema)
         {
-            trigger_error('No schema declaired', \E_USER_ERROR);
+            trigger_error('No schema declared', \E_USER_ERROR);
         }
 
         $mapping = [];
@@ -263,7 +263,7 @@ class SearchCriteriaMapper
     /**
      * Value function: Check matching key in bag.
      */
-    private function keyInBag($field): ?string
+    private function keyInBag($field): mixed
     {
         $value = $this->propertyAccessor->getValue($this->record, $field);
 
