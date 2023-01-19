@@ -215,7 +215,7 @@ class SearchCriteriaMapper
     /**
      * Return value by structure map.
      */
-    private function getValue($map): ?string
+    private function getValue($map): mixed
     {
         if (\is_string($map))
         {
