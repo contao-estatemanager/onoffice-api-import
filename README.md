@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> Open source development of this plugin has been abandoned.
+> Further development continues in private and is no longer publicly available.
+> Please visit [contao-estatemanager.com](https://www.contao-estatemanager.com/) for more information.
+
 # onOffice API Import Extension for Contao EstateManager
 Enables the import of various data records from onOffice.
 
